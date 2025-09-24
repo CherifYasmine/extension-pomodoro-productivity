@@ -35,7 +35,7 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
     <>
       <div className="newtab-time">{time.getHours().toString().padStart(2,'0')}:{time.getMinutes().toString().padStart(2,'0')}</div>
       <div className="newtab-greeting">{getGreeting(name||'')}</div>
-      <div className="newtab-task-label">What is your main focus for today?</div>
+      <div className="newtab-task-label">What is your primary goal for today?</div>
       {editTask ? (
         <input className="newtab-task-input" value={mainTask} autoFocus onChange={e=>setMainTask(e.target.value)} onBlur={()=>{setEditTask(false);chrome.storage.local.set({mainTask:{text:mainTask,done:false}});}} onKeyDown={e=>{if(e.key==='Enter'){setEditTask(false);chrome.storage.local.set({mainTask:{text:mainTask,done:false}});}}} />
       ) : (

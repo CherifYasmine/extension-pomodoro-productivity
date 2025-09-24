@@ -67,7 +67,7 @@ const NewTabApp: React.FC = () => {
 		<div className="newtab-center">
 			{/* Settings button */}
 			<button
-				style={{position:'absolute',top:24,left:24,zIndex:10,background:'#ccc',border:'none',borderRadius:40,width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:'1.5em',color:'#fff'}}
+				style={{position:'fixed',bottom:24,left:24,zIndex:10,background:'#898787ff',border:'none',borderRadius:40,width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:'1.5em',color:'#fff',boxShadow:'0 2px 8px #0006'}}
 				onClick={()=>setSettingsOpen(true)}
 				title="Settings"
 			>
