@@ -32,10 +32,6 @@ Built with React, TypeScript, and Vite (Manifest V3).
 | Sync         | Popup and new tab always in sync |
 
 
-## Quick Description (for GitHub)
-
-> A Chrome extension for focused productivity: Pomodoro timer, daily main task, and dynamic greeting. Fully persistent, customizable, and beautifully minimal. Works in both popup and new tab.
-
 ---
 
 ## Development
