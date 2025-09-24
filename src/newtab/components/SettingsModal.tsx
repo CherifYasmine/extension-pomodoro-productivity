@@ -11,7 +11,15 @@ interface SettingsModalProps {
   setName?: (n: string) => void;
 }
 
+
 export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, setDurations, onClose, name = '', setName }) => {
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  React.useEffect(() => {
+    chrome.storage.local.get(['pomodoroNotifications'], res => {
+      if (typeof res.pomodoroNotifications === 'boolean') setNotificationsEnabled(res.pomodoroNotifications);
+      else setNotificationsEnabled(true);
+    });
+  }, [open]);
 
   if (!open) return null;
   return (
@@ -23,7 +31,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
           onSubmit={e => {
             e.preventDefault();
             onClose();
-            chrome.storage.local.set({ pomodoroDurations: durations, userName: name });
+            chrome.storage.local.set({ pomodoroDurations: durations, userName: name, pomodoroNotifications: notificationsEnabled });
           }}
         >
           {setName && (
@@ -73,6 +81,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               value={durations.long}
               onChange={e => setDurations({ ...durations, long: Number(e.target.value) })}
             />
+          </label>
+          <label className={styles.label} style={{display:'flex',alignItems:'center',gap:'0.5em',marginTop:'1em'}}>
+            <input
+              type="checkbox"
+              checked={notificationsEnabled}
+              onChange={e => setNotificationsEnabled(e.target.checked)}
+              style={{width:'1.2em',height:'1.2em'}}
+            />
+            Enable sound & notifications
           </label>
           <button type="submit" className={styles.saveBtn}>Save</button>
         </form>

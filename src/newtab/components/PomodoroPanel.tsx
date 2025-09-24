@@ -14,15 +14,33 @@ import {
   computeDisplayCycle,
   persistState,
   normalizeDurations,
-  CYCLES_BEFORE_LONG_BREAK
+  CYCLES_BEFORE_LONG_BREAK,
+  playPhaseSound,
+  showPhaseNotification
 } from '../../shared/pomodoroLogic';
+interface PomodoroPanelProps {
+  durations: { focus: number; break: number; long: number };
+}
+// ...existing code...
 
-interface PomodoroPanelProps { durations: { focus: number; break: number; long: number }; }
 const initialPomodoro: PomodoroStateCanonical = { phase: 'idle', endsAt: null, running: false, cycle: 0 };
 
 export const PomodoroPanel: React.FC<PomodoroPanelProps> = ({ durations }) => {
   const [pomodoro, setPomodoro] = useState<PomodoroStateCanonical>(initialPomodoro);
   const quoteIdx = useRotatingQuoteIdx();
+  // Track previous phase for notification
+  const [prevPhase, setPrevPhase] = useState<string>(initialPomodoro.phase);
+  useEffect(() => {
+    if (pomodoro.phase !== prevPhase) {
+      chrome.storage.local.get(['pomodoroNotifications'], res => {
+        if (res.pomodoroNotifications !== false) {
+        //   playPhaseSound(pomodoro.phase);
+          showPhaseNotification(pomodoro.phase);
+        }
+      });
+      setPrevPhase(pomodoro.phase);
+    }
+  }, [pomodoro.phase, prevPhase]);
 
   // Subscribe to storage changes
   useEffect(() => {

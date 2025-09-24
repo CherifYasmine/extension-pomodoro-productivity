@@ -1,6 +1,27 @@
-// Shared Pomodoro logic used by popup and new tab
-// Storage canonical phases: focus | break | long-break | idle
-// Both UIs should only read/write this canonical shape.
+// --- Notification & Sound helpers ---
+export function playPhaseSound(phase: string) {
+  new Audio('/sounds/notification.mp3').play();
+}
+
+export function showPhaseNotification(phase: string) {
+  const titles: Record<string, string> = {
+    focus: 'Focus Time!',
+    break: 'Break Time!',
+    'long-break': 'Long Break!',
+    idle: 'Pomodoro Stopped'
+  };
+  const bodies: Record<string, string> = {
+    focus: 'Stay focused and crush your goals!',
+    break: 'Take a short break and recharge.',
+    'long-break': 'Enjoy a longer break—you earned it!',
+    idle: 'Session ended.'
+  };
+  if (window.Notification && Notification.permission === 'granted') {
+    new Notification(titles[phase] || 'Pomodoro', { body: bodies[phase] || '', icon: '/icon-128.png' });
+  } else if (window.Notification && Notification.permission !== 'denied') {
+    Notification.requestPermission();
+  }
+}
 
 export const CYCLES_BEFORE_LONG_BREAK = 4;
 
