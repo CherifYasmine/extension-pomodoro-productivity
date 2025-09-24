@@ -2,9 +2,9 @@
 import { createRoot } from 'react-dom/client';
 import { useEffect, useState } from 'react';
 import './newtab.css';
-import { SettingsModal } from './components/SettingsModal';
-import { PomodoroPanelOrGreeting } from './components/PomodoroPanelOrGreeting';
-import { TodoList } from './components/TodoList';
+import { SettingsModal } from './components/settings/SettingsModal';
+import { PomodoroPanelOrGreeting } from './components/main_view/PomodoroPanelOrGreeting';
+import { TodoList } from './components/todo_list/TodoList';
 
 
 const DEFAULTS = { focus: 25, break: 5, long: 15 };

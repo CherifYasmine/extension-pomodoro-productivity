@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PomodoroPanel } from './PomodoroPanel';
-import { useRotatingQuoteIdx, InspirationalQuote } from '../../shared/rotatingQuote';
+import { useRotatingQuoteIdx, InspirationalQuote } from '../../../shared/rotatingQuote';
 
 interface Props {
   durations: { focus: number; break: number; long: number };

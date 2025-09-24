@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRotatingQuoteIdx, InspirationalQuote } from '../../shared/rotatingQuote';
+import { useRotatingQuoteIdx, InspirationalQuote } from '../../../shared/rotatingQuote';
 
 import { PomodoroCircle } from './PomodoroTimer';
 import {
@@ -17,7 +17,7 @@ import {
   CYCLES_BEFORE_LONG_BREAK,
   playPhaseSound,
   showPhaseNotification
-} from '../../shared/pomodoroLogic';
+} from '../../../shared/pomodoroLogic';
 interface PomodoroPanelProps {
   durations: { focus: number; break: number; long: number };
 }
