@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PomodoroPanel } from './PomodoroPanel';
+import { useRotatingQuoteIdx, InspirationalQuote } from '../../shared/rotatingQuote';
 
 interface Props {
   durations: { focus: number; break: number; long: number };
@@ -13,6 +14,8 @@ interface Props {
 
 export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name, mainTask, editTask, setMainTask, setEditTask }) => {
   const [pomodoro, setPomodoro] = useState<any>(null);
+  // Call hooks unconditionally (must be before any early returns)
+  const quoteIdx = useRotatingQuoteIdx();
   useEffect(() => {
     chrome.storage.local.get(['pomodoroState'], (res) => {
       if (res.pomodoroState) setPomodoro(res.pomodoroState);
@@ -26,7 +29,7 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
     return () => chrome.storage.onChanged.removeListener(listener);
   }, []);
   if (pomodoro && (pomodoro.running || (!pomodoro.running && pomodoro.pausedAt != null && pomodoro.phase !== 'idle'))) {
-    return <PomodoroPanel durations={durations} />;
+    return <PomodoroPanel durations={durations} />; // Early return AFTER all hooks have been called
   }
   return (
     <>
@@ -45,6 +48,7 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
       }}>
         Start Focus
       </button>
+  <InspirationalQuote quoteIdx={quoteIdx} />
     </>
   );
 };
