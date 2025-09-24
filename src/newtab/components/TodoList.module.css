@@ -1,0 +1,138 @@
+.dropdown {
+    position: fixed;
+    left: 24px;
+    bottom: 80px;
+    min-width: 260px;
+    background: #fff;
+    color: #222;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px #0004;
+    padding: 1em 0.5em 0.5em 0.5em;
+    z-index: 20;
+    font-size: 1.1em;
+}
+
+.heading {
+    font-size: 1em;
+    font-weight: 600;
+}
+
+/* Overlay and modal styling consistent with SettingsModal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+}
+
+.modalContent {
+    background: #23272f;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    color: #f3f4f6;
+    min-width: 260px;
+    max-width: 420px;
+    margin: 0 0 2em 2em;
+    position: relative;
+    padding: 1em 1.5em 1.5em 1.5em;
+}
+
+.heading {
+    font-size: 2em;
+    font-weight: 700;
+    margin-bottom: 0.7em;
+    text-align: center;
+}
+
+.form {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.input {
+    background: #181a20;
+    border: none;
+    border-radius: 12px;
+    color: #f3f4f6;
+    font-size: 1.1em;
+    padding: 0.5em 1em;
+    margin-right: 0.5em;
+    outline: none;
+    transition: box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 400px;
+}
+
+.todoText {
+    flex: 1;
+    min-width: 0;
+    max-width: 400px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    display: block;
+}
+
+.input:focus {
+    box-shadow: 0 0 0 2px #2563eb44;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: #f3f4f6;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.saveBtn {
+    color: #888;
+    text-decoration: line-through;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.checkbox {
+    accent-color: #2563eb;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.5em;
+    border-radius: 6px;
+    border: 2px solid #23272f;
+    background: #181a20;
+}
+
+.deleteBtn {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin-left: auto;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: filter 0.2s;
+    color: #ef4444;
+}
+
+.deleteBtn:hover {
+    filter: brightness(1.2);
+
+}
+
+.deleteBtn:hover svg {
+    stroke: #ef4444;
+}
