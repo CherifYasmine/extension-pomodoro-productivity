@@ -1,23 +1,42 @@
+
 # Focus Productivity Pomodoro Extension
 
-A Chrome Manifest V3 extension built with React + Vite that shows:
+**A Chrome extension for focused work, with Pomodoro timer, daily main task, and dynamic greeting.**
 
-- Live clock with HH:MM:SS
-- Dynamic greeting (Good morning/afternoon/evening) with your name (editable)
+Built with React, TypeScript, and Vite (Manifest V3).
+
+**Features:**
+
+- Dynamic greeting (Good morning/afternoon/evening) with your editable name
 - One "Main Task" for the day (strike-through when completed)
-- Pomodoro style Focus Mode (work / short break / long break cycles)
-- Persistent state via chrome.storage
-- Notifications when sessions or breaks start/end
+- Pomodoro Focus Mode: Focus, Short Break, Long Break (every 4th cycle)
+- Fully persistent: all state (name, task, timer, settings) saved in chrome.storage
+- Adjustable durations for focus, break, and long break (via settings)
+- Pause/resume and auto-continue cycles
+- Long break after every 4 focus sessions
+- Consistent experience in popup and new tab
+- Sound and notification on every phase change (can be toggled in settings)
+- Modern, minimal UI
 
-## Features
 
-| Feature | Details |
-|---------|---------|
-| Greeting | Automatically changes by time of day, double-click name to edit |
-| Main Task | Add one focus task; checkbox toggles completion (strike-through) |
-| Pomodoro | Work (25m), Short Break (5m), Long Break (15m every 4th cycle) |
-| Persistence | Name, task, and pomodoro state saved in local storage |
-| Notifications | System notification when a phase transitions |
+## Key Features Table
+
+| Feature      | Details |
+|--------------|---------|
+| Greeting     | Dynamic by time of day, editable name |
+| Main Task    | One focus task per day, strike-through on complete |
+| Pomodoro     | Focus/Break/Long Break, auto-cycles, pause/resume |
+| Durations    | All durations configurable in settings |
+| Persistence  | All state saved in chrome.storage.local |
+| Notifications| Sound + desktop notification on phase change |
+| Sync         | Popup and new tab always in sync |
+
+
+## Quick Description (for GitHub)
+
+> A Chrome extension for focused productivity: Pomodoro timer, daily main task, and dynamic greeting. Fully persistent, customizable, and beautifully minimal. Works in both popup and new tab.
+
+---
 
 ## Development
 
@@ -53,12 +72,13 @@ src/popup/popup.html         # Popup HTML entry (becomes dist/popup.html)
 src/popup/popup.tsx          # React entrypoint for popup UI
 ```
 
-## Future Enhancements
 
-- Configurable durations
-- Sound/vibration alerts
-- Stats/history of completed sessions
+## Possible Future Enhancements
+
+- Session stats/history
 - Optional dark/light themes
+- More notification/sound options
+
 
 ## License
 

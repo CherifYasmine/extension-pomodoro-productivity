@@ -1,0 +1,61 @@
+# === Node / PNPM / NPM / Yarn ===
+node_modules/
+.pnpm-store/
+.npm/
+yarn-error.log
+pnpm-debug.log*
+npm-debug.log*
+
+# === Build artifacts ===
+dist/
+build/
+coverage/
+*.log
+
+# Chrome extension build output (if separate)
+extension-dist/
+
+# Vite / Temp
+.vite/
+*.tsbuildinfo
+
+# === Environment / Secrets ===
+.env
+.env.*
+!.env.example
+
+# === IDE / Editor ===
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# === TypeScript ===
+*.d.ts.map
+
+# === Tests ===
+.jest-cache/
+.jest/
+.output_tests/
+
+# === Misc ===
+.eslintcache
+.stylelintcache
+.cache/
+.tmp/
+.temp/
+.sass-cache/
+.parcel-cache/
+
+# === Reports ===
+reports/
+
+# Lock backups
+package-lock.backup.json
+
+# Local scripts / scratch
+scripts/local/*.sh
