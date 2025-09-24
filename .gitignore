@@ -23,6 +23,11 @@ extension-dist/
 .env
 .env.*
 !.env.example
+*.pem
+
+# Optional: other key/cert files (uncomment if desired)
+# *.key
+# *.crt
 
 # === IDE / Editor ===
 .vscode/*

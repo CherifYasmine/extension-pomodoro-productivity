@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Focus Productivity Pomodoro",
+  "name": "Productivity Focus",
   "version": "0.1.0",
-  "description": "Personalized greeting, main daily task, and Pomodoro focus mode.",
+  "description": "Personalized Pomodoro focus mode, main daily task, and todo list.",
   "action": {
     "default_title": "Focus Mode",
     "default_popup": "popup.html"
