@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": [
+            "ES2022",
+            "DOM"
+        ],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "baseUrl": "./src",
+        "noImplicitAny": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "allowJs": false,
+        "types": [
+            "node"
+        ]
+    },
+    "include": [
+        "src",
+        "vite.config.ts"
+    ]
+}
