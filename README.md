@@ -10,6 +10,8 @@ Built with React, TypeScript, and Vite (Manifest V3).
 - Pomodoro Focus Mode: Focus, Short Break, Long Break (every 4th cycle)
 - Adjustable durations for focus, break, and long break (via settings)
 - Pause/resume and auto-continue cycles
+- Block distracting websites during Focus mode (customizable list)
+- Light/Dark/Auto theme support (system or manual override)
 
 ---
 
