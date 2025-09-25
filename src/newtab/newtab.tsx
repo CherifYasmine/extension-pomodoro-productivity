@@ -5,6 +5,7 @@ import './newtab.css';
 import { SettingsModal } from './components/settings/SettingsModal';
 import { PomodoroPanelOrGreeting } from './components/main_view/PomodoroPanelOrGreeting';
 import { TodoList } from './components/todo_list/TodoList';
+import { BlockSitesModal } from './components/blocked_sites/BlockSitesModal';
 
 
 const DEFAULTS = { focus: 25, break: 5, long: 15 };
@@ -25,6 +26,7 @@ const NewTabApp: React.FC = () => {
     const [time, setTime] = useState(new Date());
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [todoOpen, setTodoOpen] = useState(false);
+    const [blockSitesOpen, setBlockSitesOpen] = useState(false);
     const [durations, setDurations] = useState<{ focus: number, break: number, long: number }>(DEFAULTS);
 
     useEffect(() => {
@@ -56,6 +58,14 @@ const NewTabApp: React.FC = () => {
 
     return (
         <div className="newtab-center">
+            {/* Block Sites button above tasks and settings */}
+            <button
+                style={{ position: 'fixed', bottom: 124, left: 24, zIndex: 12, background: '#898787ff', border: 'none', borderRadius: 40, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5em', color: '#fff', boxShadow: '0 2px 8px #0006' }}
+                onClick={() => setBlockSitesOpen(true)}
+                title="Block Sites"
+            >
+                <span role="img" aria-label="block">🚫</span>
+            </button>
             {/* Tasks button above settings */}
             <button
                 style={{ position: 'fixed', bottom: 74, left: 24, zIndex: 11, background: '#898787ff', border: 'none', borderRadius: 40, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5em', color: '#fff', boxShadow: '0 2px 8px #0006' }}
@@ -72,6 +82,10 @@ const NewTabApp: React.FC = () => {
             >
                 <span role="img" aria-label="settings">⚙️</span>
             </button>
+            {/* BlockSites modal */}
+            {blockSitesOpen && (
+                <BlockSitesModal open={blockSitesOpen} onClose={() => setBlockSitesOpen(false)} />
+            )}
             {/* TodoList dropdown */}
             <TodoList open={todoOpen} onClose={() => setTodoOpen(false)} />
             {/* Settings modal */}

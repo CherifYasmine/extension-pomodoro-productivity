@@ -17,7 +17,7 @@ export function showPhaseNotification(phase: string) {
     idle: 'Session ended.'
   };
   if (window.Notification && Notification.permission === 'granted') {
-    new Notification(titles[phase] || 'Pomodoro', { body: bodies[phase] || '', icon: '/icon-128.png' });
+    new Notification(titles[phase] || 'Pomodoro', { body: bodies[phase] || '', icon: '/icon128.png' });
   } else if (window.Notification && Notification.permission !== 'denied') {
     Notification.requestPermission();
   }

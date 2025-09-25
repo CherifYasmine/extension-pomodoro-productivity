@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Productivity Focus",
   "version": "0.1.0",
-  "description": "Personalized Pomodoro focus mode, main daily task, and todo list.",
+  "description": "PTransform your new tab into a personal productivity hub—Pomodoro timer, daily goal, and persistent to-do list, all in one beautiful dashboard",
   "action": {
     "default_title": "Focus Mode",
     "default_popup": "popup.html"
@@ -11,7 +11,15 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": ["storage", "notifications"],
+  "permissions": [
+    "storage",
+    "notifications",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
   "icons": {
     "16": "icon16.png",
     "48": "icon64.png",

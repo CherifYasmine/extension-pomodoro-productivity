@@ -1,91 +1,49 @@
-// Background service worker logic for persistent Pomodoro timer
-// This keeps time even if popup is closed.
+// --- Block websites during Focus mode (Manifest V3) ---
+// Canonical Pomodoro state: { phase: 'focus' | 'break' | 'long-break' | 'idle', running: boolean, ... }
+let cachedPomodoroState = { phase: 'idle', running: false };
+let cachedBlockedSites: string[] = [];
 
-interface PomodoroState {
-  phase: 'work' | 'short-break' | 'long-break' | 'idle';
-  endsAt: number | null;
-  cycle: number;
-  running: boolean;
-}
-
-const WORK_MIN = 25;
-const SHORT_BREAK_MIN = 5;
-const LONG_BREAK_MIN = 15;
-const CYCLES_BEFORE_LONG_BREAK = 4;
-
-const initialState: PomodoroState = { phase: 'idle', endsAt: null, cycle: 0, running: false };
-
-async function getState(): Promise<PomodoroState> {
-  return new Promise(resolve => {
-    chrome.storage.local.get(['pomodoroState'], (res: { pomodoroState?: PomodoroState }) => {
-      resolve(res.pomodoroState || initialState);
-    });
-  });
-}
-
-function saveState(state: PomodoroState) {
-  chrome.storage.local.set({ pomodoroState: state });
-}
-
-function durationFor(phase: PomodoroState['phase']): number {
-  switch (phase) {
-    case 'work': return WORK_MIN * 60 * 1000;
-    case 'short-break': return SHORT_BREAK_MIN * 60 * 1000;
-    case 'long-break': return LONG_BREAK_MIN * 60 * 1000;
-    default: return 0;
-  }
-}
-
-async function maybeTransition() {
-  const state = await getState();
-  if (!state.running || !state.endsAt) return;
-  if (Date.now() >= state.endsAt) {
-    if (state.phase === 'work') {
-      const nextCycle = state.cycle + 1;
-      const needsLong = nextCycle % CYCLES_BEFORE_LONG_BREAK === 0;
-      const nextPhase: PomodoroState['phase'] = needsLong ? 'long-break' : 'short-break';
-      const newState: PomodoroState = { phase: nextPhase, cycle: nextCycle, running: true, endsAt: Date.now() + durationFor(nextPhase) };
-      saveState(newState);
-      notifyPhase(nextPhase);
-    } else {
-      const newState: PomodoroState = { ...state, phase: 'idle', running: false, endsAt: null };
-      saveState(newState);
-      notifyPhase('idle');
+function updateBlockingRules() {
+  // Remove all previous rules
+  chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: Array.from({length: 100}, (_, i) => i + 1) }, () => {
+    // Only add rules if Focus mode is active
+    if (cachedPomodoroState.running && cachedPomodoroState.phase === 'focus' && cachedBlockedSites.length) {
+      const rules = cachedBlockedSites.map((site, idx) => ({
+        id: idx + 1,
+        priority: 1,
+        action: {
+          type: "redirect" as const,
+          redirect: {
+            extensionPath: "/blocked.html"
+          }
+        },
+        condition: {
+          urlFilter: `*://*.${site}/*`,
+          resourceTypes: ["main_frame" as const]
+        }
+      }));
+      chrome.declarativeNetRequest.updateDynamicRules({ addRules: rules }, () => {});
     }
-  }
-}
-
-function notifyPhase(phase: PomodoroState['phase']) {
-  const title = phase === 'work' ? 'Focus session' : phase === 'idle' ? 'Session complete' : 'Break started';
-  const message = phase === 'work' ? 'Time to focus!' : phase === 'idle' ? 'All done.' : 'Relax for a bit.';
-  chrome.notifications.create({
-    type: 'basic',
-    iconUrl: 'icon128.png',
-    title,
-    message
   });
 }
 
-chrome.runtime.onMessage.addListener((msg: any, _sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
-  if (msg.type === 'POMODORO_COMMAND') {
-    (async () => {
-      const state = await getState();
-      if (msg.command === 'START' && msg.phase) {
-        const newState: PomodoroState = { phase: msg.phase, running: true, cycle: state.cycle, endsAt: Date.now() + durationFor(msg.phase) };
-        saveState(newState);
-        notifyPhase(msg.phase);
-        sendResponse(newState);
-      } else if (msg.command === 'STOP') {
-        const newState: PomodoroState = { ...state, running: false, phase: 'idle', endsAt: null };
-        saveState(newState);
-        sendResponse(newState);
-      } else if (msg.command === 'GET_STATE') {
-        sendResponse(state);
-      }
-    })();
-    return true; // async
-  }
+chrome.storage.local.get(['pomodoroState', 'blockedSites'], res => {
+  if (res.pomodoroState) cachedPomodoroState = res.pomodoroState;
+  if (Array.isArray(res.blockedSites)) cachedBlockedSites = res.blockedSites;
+  updateBlockingRules();
 });
 
-// Periodic check
-setInterval(maybeTransition, 1000);
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local') {
+    let changed = false;
+    if (changes.pomodoroState && changes.pomodoroState.newValue) {
+      cachedPomodoroState = changes.pomodoroState.newValue;
+      changed = true;
+    }
+    if (changes.blockedSites && Array.isArray(changes.blockedSites.newValue)) {
+      cachedBlockedSites = changes.blockedSites.newValue;
+      changed = true;
+    }
+    if (changed) updateBlockingRules();
+  }
+});
