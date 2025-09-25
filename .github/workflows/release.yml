@@ -3,6 +3,8 @@ name: Build & Release Extension
 on:
   push:
     branches: [main]
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -26,9 +28,10 @@ jobs:
       - name: Archive dist folder
         run: zip -r extension-dist.zip dist/
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (tag or main)
         uses: softprops/action-gh-release@v1
         with:
           files: extension-dist.zip
+          draft: ${{ github.ref != 'refs/tags/' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
