@@ -14,16 +14,36 @@ interface SettingsModalProps {
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, setDurations, onClose, name = '', setName }) => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [theme, setTheme] = React.useState<'auto' | 'light' | 'dark'>('auto');
+  const [systemDark, setSystemDark] = React.useState<boolean>(() => (
+    typeof window !== 'undefined' && 'matchMedia' in window
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : true
+  ));
   React.useEffect(() => {
-    chrome.storage.local.get(['pomodoroNotifications'], res => {
+    chrome.storage.local.get(['pomodoroNotifications', 'theme'], res => {
       if (typeof res.pomodoroNotifications === 'boolean') setNotificationsEnabled(res.pomodoroNotifications);
       else setNotificationsEnabled(true);
+      if (res.theme === 'light' || res.theme === 'dark' || res.theme === 'auto') setTheme(res.theme);
+      else setTheme('auto');
     });
   }, [open]);
 
+  React.useEffect(() => {
+    if (theme !== 'auto') return;
+    if (!('matchMedia' in window)) return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    mq.addEventListener('change', listener);
+    return () => {
+      mq.removeEventListener('change', listener);
+    };
+  }, [theme]);
+
+  const themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : (systemDark ? 'theme-dark' : 'theme-light');
   if (!open) return null;
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={`${themeClass} ${styles.modalOverlay}`} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <h2 className={styles.heading}>Pomodoro Settings</h2>
         <form
@@ -31,7 +51,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
           onSubmit={e => {
             e.preventDefault();
             onClose();
-            chrome.storage.local.set({ pomodoroDurations: durations, userName: name, pomodoroNotifications: notificationsEnabled });
+            chrome.storage.local.set({ pomodoroDurations: durations, userName: name, pomodoroNotifications: notificationsEnabled, theme });
           }}
         >
           {setName && (
@@ -90,6 +110,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               style={{width:'1.2em',height:'1.2em'}}
             />
             Enable sound & notifications
+          </label>
+          <label className={styles.label} style={{marginTop:'1em'}}>
+            Theme:
+            <select
+              className={styles.input}
+              value={theme}
+              onChange={e => setTheme(e.target.value as 'auto' | 'light' | 'dark')}
+            >
+              <option value="auto">Auto (System)</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
           </label>
           <button type="submit" className={styles.saveBtn}>Save</button>
         </form>

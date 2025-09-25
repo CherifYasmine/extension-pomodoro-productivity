@@ -6,9 +6,16 @@ interface BlockSitesModalProps {
   onClose: () => void;
 }
 
+
 export const BlockSitesModal: React.FC<BlockSitesModalProps> = ({ open, onClose }) => {
   const [sites, setSites] = useState<string[]>([]);
   const [input, setInput] = useState('');
+  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto');
+  const [systemDark, setSystemDark] = useState<boolean>(() => (
+    typeof window !== 'undefined' && 'matchMedia' in window
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : true
+  ));
   const DEFAULT_SITES = [
     'facebook.com',
     'twitter.com',
@@ -25,7 +32,7 @@ export const BlockSitesModal: React.FC<BlockSitesModalProps> = ({ open, onClose 
 
   useEffect(() => {
     if (open) {
-      chrome.storage.local.get(['blockedSites'], res => {
+      chrome.storage.local.get(['blockedSites', 'theme'], res => {
         let current = Array.isArray(res.blockedSites) ? res.blockedSites : [];
         // If no sites set, use defaults
         if (!current.length) {
@@ -33,9 +40,23 @@ export const BlockSitesModal: React.FC<BlockSitesModalProps> = ({ open, onClose 
           chrome.storage.local.set({ blockedSites: current });
         }
         setSites(current);
+        if (res.theme === 'light' || res.theme === 'dark' || res.theme === 'auto') setTheme(res.theme);
+        else setTheme('auto');
       });
     }
   }, [open]);
+
+  // Listen to system theme changes when in Auto
+  useEffect(() => {
+    if (theme !== 'auto') return;
+    if (!('matchMedia' in window)) return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    mq.addEventListener('change', listener);
+    return () => {
+      mq.removeEventListener('change', listener);
+    };
+  }, [theme]);
 
   const addSite = () => {
     const site = input.trim();
@@ -53,9 +74,10 @@ export const BlockSitesModal: React.FC<BlockSitesModalProps> = ({ open, onClose 
     chrome.storage.local.set({ blockedSites: updated });
   };
 
+  const themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : (systemDark ? 'theme-dark' : 'theme-light');
   if (!open) return null;
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={`${themeClass} ${styles.modalOverlay}`} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
         <h2 className={styles.heading}>Block Sites while working</h2>
         <div className={styles.form}>

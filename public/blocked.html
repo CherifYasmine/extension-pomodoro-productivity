@@ -6,8 +6,6 @@
   <link rel="icon" href="icon128.png">
   <style>
     body {
-      background: linear-gradient(120deg, #232526 0%, #414345 100%);
-      color: #fff;
       font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
       display: flex;
       flex-direction: column;
@@ -15,6 +13,8 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      background: linear-gradient(120deg, #232526 0%, #414345 100%);
+      color: #fff;
     }
     .container {
       background: rgba(34,34,34,0.95);
@@ -29,7 +29,7 @@
       margin-bottom: 0.5em;
     }
     .quote {
-      /* font-size: 1.1em; */
+      font-size: 1.1em;
       margin: 1.5em 0 2em 0;
       opacity: 0.8;
     }
@@ -51,6 +51,26 @@
     img {
       width: 64px;
       margin-bottom: 1em;
+    }
+
+    /* Light mode styles */
+    @media (prefers-color-scheme: light) {
+      body {
+        background: linear-gradient(120deg, #f3f4f6 0%, #e0e0e0 100%);
+        color: #222;
+      }
+      .container {
+        background: rgba(255,255,255,0.95);
+        color: #222;
+        box-shadow: 0 4px 24px #bbb8;
+      }
+      .btn {
+        background: #388e3c;
+        color: #fff;
+      }
+      .btn:hover {
+        background: #4caf50;
+      }
     }
   </style>
 </head>

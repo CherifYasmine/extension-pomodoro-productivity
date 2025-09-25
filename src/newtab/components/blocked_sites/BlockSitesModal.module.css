@@ -1,3 +1,45 @@
+:global(.theme-light) .modalContent {
+  background: #fff !important;
+  color: #222 !important;
+}
+:global(.theme-light) .input {
+  background: #f3f4f6 !important;
+  color: #222 !important;
+  border: 1px solid #ccc !important;
+}
+:global(.theme-light) .siteItem {
+  background: #f3f4f6 !important;
+  color: #222 !important;
+}
+:global(.theme-light) .removeBtn {
+  background: #e53935 !important;
+  color: #fff !important;
+}
+:global(.theme-light) .saveBtn {
+  background: #388e3c !important;
+  color: #fff !important;
+}
+:global(.theme-light) .closeBtn {
+  color: #222 !important;
+}
+:global(.theme-light) .siteList {
+  scrollbar-color: #ccc #eee !important;
+}
+:global(.theme-light) .siteList::-webkit-scrollbar {
+  background: #eee !important;
+}
+:global(.theme-light) .siteList::-webkit-scrollbar-thumb {
+  background: #ccc !important;
+}
+/* Theme override classes */
+:global(.theme-dark) .modalContent {
+  background: #222 !important;
+  color: #fff !important;
+}
+:global(.theme-light) .modalContent {
+  background: #fff !important;
+  color: #222 !important;
+}
 .modalOverlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;

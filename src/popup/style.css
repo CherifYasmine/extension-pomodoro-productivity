@@ -1,3 +1,65 @@
+/* Theme override classes */
+/* Theme override classes for popup */
+.theme-dark body {
+    background: #0f1115 !important;
+    color: #f5f7fa !important;
+}
+.theme-light body {
+    background: #f3f4f6 !important;
+    color: #222 !important;
+}
+.theme-dark .container {
+    background: #0f1115 !important;
+    color: #f5f7fa !important;
+}
+.theme-light .container {
+    background: #f3f4f6 !important;
+    color: #222 !important;
+}
+.theme-dark .pomodoro {
+    background: #1a1d23 !important;
+    color: #f5f7fa !important;
+}
+.theme-light .pomodoro {
+    background: #fff !important;
+    color: #222 !important;
+}
+.theme-dark .name-form input,
+.theme-dark .task-edit input {
+    background: #1a1d23 !important;
+    color: #fff !important;
+    border: 1px solid #333 !important;
+}
+.theme-light .name-form input,
+.theme-light .task-edit input {
+    background: #f3f4f6 !important;
+    color: #222 !important;
+    border: 1px solid #e5e7eb !important;
+}
+.theme-dark .main-task h2,
+.theme-dark .pomodoro h2 {
+    color: #f5f7fa !important;
+}
+.theme-light .main-task h2,
+.theme-light .pomodoro h2 {
+    color: #222 !important;
+}
+.theme-dark .task-view label {
+    color: #f5f7fa !important;
+}
+.theme-light .task-view label {
+    color: #222 !important;
+}
+.theme-dark .task-view .done {
+    color: #888 !important;
+    text-decoration: line-through !important;
+    opacity: 0.6;
+}
+.theme-light .task-view .done {
+    color: #888 !important;
+    text-decoration: line-through !important;
+    opacity: 0.6;
+}
 body,
 html {
     margin: 0;

@@ -1,3 +1,93 @@
+.done {
+    color: #888 !important;
+    text-decoration: line-through !important;
+}
+.todoText {
+    color: #f3f4f6;
+    background: none;
+    border: none;
+    cursor: pointer;
+    min-width: 0;
+    word-break: break-word;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.todoText.done {
+    color: #888 !important;
+    text-decoration: line-through !important;
+}
+:global(.theme-light) .todoText {
+    color: #222 !important;
+    text-decoration: none !important;
+}
+:global(.theme-light) .todoText.done {
+    color: #888 !important;
+    text-decoration: line-through !important;
+}
+/* Global theme overrides for modal and scrollbars */
+:global(.theme-light) .modalContent {
+    background: #fff !important;
+    color: #222 !important;
+}
+:global(.theme-dark) .modalContent {
+    background: #23272f !important;
+    color: #f3f4f6 !important;
+}
+:global(.theme-light) .input {
+    background: #f3f4f6 !important;
+    color: #222 !important;
+    border: 1px solid #e5e7eb !important;
+}
+:global(.theme-dark) .input {
+    background: #181a20 !important;
+    color: #f3f4f6 !important;
+    border: none !important;
+}
+:global(.theme-light) .checkbox {
+    accent-color: #2563eb !important;
+    background: #fff !important;
+    border: 2px solid #e5e7eb !important;
+}
+:global(.theme-dark) .checkbox {
+    accent-color: #2563eb !important;
+    background: #181a20 !important;
+    border: 2px solid #23272f !important;
+}
+
+/* Scrollbar styling for theme */
+:global(.theme-light) ::-webkit-scrollbar {
+    width: 12px;
+    background: #f3f4f6 !important;
+}
+:global(.theme-light) ::-webkit-scrollbar-thumb {
+    background: #e5e7eb !important;
+    border-radius: 6px;
+}
+:global(.theme-dark) ::-webkit-scrollbar {
+    width: 12px;
+    background: #23272f !important;
+}
+:global(.theme-dark) ::-webkit-scrollbar-thumb {
+    background: #181a20 !important;
+    border-radius: 6px;
+}
+
+/* Firefox scrollbar */
+:global(.theme-light) {
+    scrollbar-color: #e5e7eb #f3f4f6 !important;
+}
+:global(.theme-dark) {
+    scrollbar-color: #181a20 #23272f !important;
+}
+/* Theme override classes */
+.theme-dark .modalContent {
+    background: #23272f !important;
+    color: #f3f4f6 !important;
+}
+.theme-light .modalContent {
+    background: #fff !important;
+    color: #222 !important;
+}
 .dropdown {
     position: fixed;
     left: 24px;

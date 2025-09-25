@@ -8,6 +8,29 @@ interface Todo {
 }
 
 export const TodoList: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+    const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto');
+    const [systemDark, setSystemDark] = useState<boolean>(() => (
+        typeof window !== 'undefined' && 'matchMedia' in window
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+            : true
+    ));
+    useEffect(() => {
+        chrome.storage.local.get(['theme'], res => {
+            if (res.theme === 'light' || res.theme === 'dark' || res.theme === 'auto') setTheme(res.theme);
+            else setTheme('auto');
+        });
+    }, [open]);
+    useEffect(() => {
+        if (theme !== 'auto') return;
+        if (!('matchMedia' in window)) return;
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+        mq.addEventListener('change', listener);
+        return () => {
+            mq.removeEventListener('change', listener);
+        };
+    }, [theme]);
+    const themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : (systemDark ? 'theme-dark' : 'theme-light');
     const [todos, setTodos] = useState<Todo[]>([]);
     const [newTodo, setNewTodo] = useState('');
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -53,7 +76,7 @@ export const TodoList: React.FC<{ open: boolean; onClose: () => void }> = ({ ope
 
     if (!open) return null;
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
+        <div className={`${themeClass} ${styles.modalOverlay}`} onClick={onClose}>
             <div className={styles.modalContent} onClick={e => e.stopPropagation()} style={{ minWidth: 260, position: 'fixed', left: 24, bottom: 80, padding: '2em 1.5em 1.5em 1.5em' }}>
                 <h2 className={styles.heading}>Tasks</h2>
                 <ul className={styles.form} style={{ marginBottom: '1em', padding: 0 }}>
@@ -72,8 +95,7 @@ export const TodoList: React.FC<{ open: boolean; onClose: () => void }> = ({ ope
                                 />
                             ) : (
                                 <span
-                                    className={todo.done ? `${styles.todoText} ${styles.saveBtn}` : styles.todoText}
-                                    style={{ textDecoration: todo.done ? 'line-through' : 'none', color: todo.done ? '#888' : '#f3f4f6', background: 'none', border: 'none', cursor: 'pointer', minWidth: 0, wordBreak: 'break-word' }}
+                                    className={todo.done ? `${styles.todoText} ${styles.done}` : styles.todoText}
                                     onDoubleClick={() => startEdit(todo.id, todo.text)}
                                 >{todo.text}</span>
                             )}
