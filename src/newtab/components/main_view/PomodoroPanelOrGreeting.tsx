@@ -90,6 +90,7 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
       <button className="newtab-focus-btn" onClick={() => {
         const endsAt = Date.now() + durations.focus*60*1000;
         const next = { phase: 'focus', running: true, endsAt, cycle: pomodoro && typeof pomodoro.cycle === 'number' ? pomodoro.cycle : 0 };
+        setPomodoro(next);
         chrome.storage.local.set({ pomodoroState: next });
       }}>
         Start Focus
