@@ -80,10 +80,10 @@ export const PomodoroPanel: React.FC<PomodoroPanelProps> = ({ durations }) => {
 
   return (
     <>
-      <div className="pomodoro-tabs">
+      {/* <div className="pomodoro-tabs">
         <div className={"pomodoro-tab"+(pomodoro.phase==='focus'?' active':'')} onClick={()=>{if(pomodoro.phase!=='focus') doStartFocus();}}>FOCUS</div>
         <div className={"pomodoro-tab"+(pomodoro.phase==='break'?' active':'')} onClick={()=>{if(pomodoro.phase!=='break') doStartBreak();}}>BREAK</div>
-      </div>
+      </div> */}
       <PomodoroCircle percent={percent} time={timeStr} label={pomodoro.phase==='focus'?'Focus':pomodoro.phase==='break'?'Break':'Long Break'} />
       <div style={{display:'flex',gap:'1em',justifyContent:'center'}}>
         <button className="newtab-focus-btn" style={{background:'#b91c1c',marginTop:'1em'}} onClick={doStop}>Stop</button>

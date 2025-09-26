@@ -45,9 +45,11 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
     return <PomodoroPanel durations={durations} />; // Early return AFTER all hooks have been called
   }
   const nameWidthCh = Math.min(Math.max((userName ? userName : 'your name').length, 4), 20); // reserve space for placeholder
+  const shortMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const formattedDateTime = `${shortMonths[time.getMonth()]} ${time.getDate()}, ${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}`;
   return (
     <>
-      <div className="newtab-time">{time.getHours().toString().padStart(2,'0')}:{time.getMinutes().toString().padStart(2,'0')}</div>
+      <div className="newtab-time">{formattedDateTime}</div>
       <div className="newtab-greeting" style={{display:'flex',justifyContent:'center',gap:'0.4ch',flexWrap:'wrap'}}>
         <span>{getGreetingPrefix()},</span>
         {editingName ? (
