@@ -17,7 +17,7 @@ body, html {
 }
 
 .newtab-time {
-  font-size: 7vw;
+  font-size: 6vw;
   font-weight: 700;
   letter-spacing: 2px;
   text-shadow: 0 2px 16px #0008;
@@ -27,7 +27,7 @@ body, html {
 .newtab-greeting {
   font-size: 2vw;
   font-weight: 400;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
   text-shadow: 0 2px 8px #0006;
 }
 
@@ -117,7 +117,7 @@ body, html {
 }
 
 @media (max-width: 600px) {
-  .newtab-time { font-size: 12vw; }
+  .newtab-time { font-size: 10vw; }
   .newtab-greeting { font-size: 5vw; }
   .newtab-task-input { font-size: 4vw; width: 80vw; }
   .pomodoro-tab { font-size: 3vw; }

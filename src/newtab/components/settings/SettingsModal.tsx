@@ -11,19 +11,22 @@ interface SettingsModalProps {
   setName?: (n: string) => void;
 }
 
-
 export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, setDurations, onClose, name = '', setName }) => {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [soundEnabled, setSoundEnabled] = React.useState(true);
   const [theme, setTheme] = React.useState<'auto' | 'light' | 'dark'>('auto');
   const [systemDark, setSystemDark] = React.useState<boolean>(() => (
     typeof window !== 'undefined' && 'matchMedia' in window
       ? window.matchMedia('(prefers-color-scheme: dark)').matches
       : true
   ));
+
   React.useEffect(() => {
-    chrome.storage.local.get(['pomodoroNotifications', 'theme'], res => {
+    chrome.storage.local.get(['pomodoroNotifications', 'pomodoroSound', 'theme'], res => {
       if (typeof res.pomodoroNotifications === 'boolean') setNotificationsEnabled(res.pomodoroNotifications);
       else setNotificationsEnabled(true);
+      if (typeof res.pomodoroSound === 'boolean') setSoundEnabled(res.pomodoroSound);
+      else setSoundEnabled(true);
       if (res.theme === 'light' || res.theme === 'dark' || res.theme === 'auto') setTheme(res.theme);
       else setTheme('auto');
     });
@@ -35,13 +38,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
     mq.addEventListener('change', listener);
-    return () => {
-      mq.removeEventListener('change', listener);
-    };
+    return () => mq.removeEventListener('change', listener);
   }, [theme]);
 
   const themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : (systemDark ? 'theme-dark' : 'theme-light');
   if (!open) return null;
+
   return (
     <div className={`${themeClass} ${styles.modalOverlay}`} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -50,8 +52,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
           className={styles.form}
           onSubmit={e => {
             e.preventDefault();
+            // persist settings
+            chrome.storage.local.set({
+              pomodoroDurations: durations,
+              userName: name,
+              pomodoroNotifications: notificationsEnabled,
+              pomodoroSound: soundEnabled,
+              theme
+            });
             onClose();
-            chrome.storage.local.set({ pomodoroDurations: durations, userName: name, pomodoroNotifications: notificationsEnabled, theme });
           }}
         >
           {setName && (
@@ -66,6 +75,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               />
             </label>
           )}
+
           <label className={styles.label}>
             Focus (minutes):
             <input
@@ -78,6 +88,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               onChange={e => setDurations({ ...durations, focus: Number(e.target.value) })}
             />
           </label>
+
           <label className={styles.label}>
             Break (minutes):
             <input
@@ -90,6 +101,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               onChange={e => setDurations({ ...durations, break: Number(e.target.value) })}
             />
           </label>
+
           <label className={styles.label}>
             Long Break (minutes):
             <input
@@ -102,16 +114,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               onChange={e => setDurations({ ...durations, long: Number(e.target.value) })}
             />
           </label>
-          <label className={styles.label} style={{display:'flex',alignItems:'center',gap:'0.5em',marginTop:'1em'}}>
-            <input
-              type="checkbox"
-              checked={notificationsEnabled}
-              onChange={e => setNotificationsEnabled(e.target.checked)}
-              style={{width:'1.2em',height:'1.2em'}}
-            />
-            Enable sound & notifications
-          </label>
-          <label className={styles.label} style={{marginTop:'1em'}}>
+
+          <div style={{ display: 'flex', gap: '1em', alignItems: 'center', marginTop: '1em' }}>
+            <label className={styles.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+              <input
+                type="checkbox"
+                checked={notificationsEnabled}
+                onChange={e => setNotificationsEnabled(e.target.checked)}
+                style={{ width: '1.2em', height: '1.2em' }}
+              />
+              Notifications
+            </label>
+
+            <label className={styles.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+              <input
+                type="checkbox"
+                checked={soundEnabled}
+                onChange={e => setSoundEnabled(e.target.checked)}
+                style={{ width: '1.2em', height: '1.2em' }}
+              />
+              Sound
+            </label>
+          </div>
+
+          <label className={styles.label} style={{ marginTop: '1em' }}>
             Theme:
             <select
               className={styles.input}
@@ -123,8 +149,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
               <option value="dark">Dark</option>
             </select>
           </label>
+
           <button type="submit" className={styles.saveBtn}>Save</button>
         </form>
+
         <button onClick={onClose} className={styles.closeBtn} title="Close">×</button>
       </div>
     </div>

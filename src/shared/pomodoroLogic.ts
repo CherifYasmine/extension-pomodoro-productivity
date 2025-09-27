@@ -1,6 +1,6 @@
 // --- Notification & Sound helpers ---
 export function playPhaseSound(phase: string) {
-  new Audio('/sounds/notification.mp3').play();
+  new Audio('/sounds/notification.wav').play();
 }
 
 export function showPhaseNotification(phase: string) {

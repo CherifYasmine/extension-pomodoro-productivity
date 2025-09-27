@@ -1,0 +1,109 @@
+.bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 32px; /* some padding to avoid edge collision */
+    margin: 0 24px;
+    height: 76px; /* reserve space above floating round buttons */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* center the scroll container */
+    z-index: 5; /* put bar under floating buttons */
+}
+
+.scrollContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 16px; /* internal padding for the scrollable area */
+    margin: 0 24px; /* add left and right margins */
+    max-width: calc(100% - 48px); /* account for the margins */
+    margin-bottom: 20px;
+
+    /* Darker scrollbar: make both thumb and track more visible by default */
+    scrollbar-width: thin; /* Firefox */
+    /* thumb color, track color */
+    scrollbar-color: rgba(255,255,255,0.22) rgba(0,0,0,0.2);
+}
+
+.scrollContainer::-webkit-scrollbar {
+    height: 10px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.18);
+    border-radius: 6px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.26);
+    border-radius: 6px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.34);
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* center both favicon and domain vertically so arrows line up with favicons */
+    justify-content: center;
+    min-width: 58px; /* Make items much wider to force overflow */
+    /* width: 120px; */
+    background: transparent; /* Add background to see item bounds */
+    border: none; /* Add border to see items */
+    color: inherit;
+    cursor: pointer;
+    /* padding: 6px 4px 6px; */
+    border-radius: 8px;
+    flex: 0 0 auto;
+    position: relative;
+    height: 100%; /* make all items same height so internal content lines up */
+}
+
+.fav {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+    margin-top: 0; /* remove top margin so favicon vertically centers with the arrow */
+}
+
+.domain {
+    font-size: 11px;
+    margin-top: 6px;
+    opacity: 0.95;
+    max-width: 72px;
+    text-align: center;
+    /* allow up to 2 lines, then clamp with ellipsis */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    line-height: 1.1;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-height: 24px; /* reserve two-line height so titles align across items */
+}
+
+/* subtle hover */
+.item:hover .fav {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.35);
+}
+
+/* keep element in layout but hide visually and disable pointer events */
+.invisible {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}

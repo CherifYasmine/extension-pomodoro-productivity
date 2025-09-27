@@ -6,6 +6,8 @@ import { SettingsModal } from './components/settings/SettingsModal';
 import { PomodoroPanelOrGreeting } from './components/main_view/PomodoroPanelOrGreeting';
 import { TodoList } from './components/todo_list/TodoList';
 import { BlockSitesModal } from './components/blocked_sites/BlockSitesModal';
+import { BookmarksModal } from './components/bookmarks/BookmarksModal';
+import { BookmarksBar } from './components/bookmarks/BookmarksBar';
 
 
 const DEFAULTS = { focus: 25, break: 5, long: 15 };
@@ -27,6 +29,7 @@ const NewTabApp: React.FC = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [todoOpen, setTodoOpen] = useState(false);
     const [blockSitesOpen, setBlockSitesOpen] = useState(false);
+    const [bookmarksOpen, setBookmarksOpen] = useState(false);
     const [durations, setDurations] = useState<{ focus: number, break: number, long: number }>(DEFAULTS);
 
     useEffect(() => {
@@ -58,6 +61,15 @@ const NewTabApp: React.FC = () => {
 
     return (
         <div className="newtab-center">
+            {/* Bookmarks button */}
+            <button
+                style={{ position: 'fixed', bottom: 174, left: 24, zIndex: 13, background: '#898787ff', border: 'none', borderRadius: 40, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5em', color: '#fff', boxShadow: '0 2px 8px #0006' }}
+                onClick={() => setBookmarksOpen(true)}
+                title="Bookmarks"
+            >
+                <span role="img" aria-label="bookmarks">🔖</span>
+            </button>
+
             {/* Block Sites button above tasks and settings */}
             <button
                 style={{ position: 'fixed', bottom: 124, left: 24, zIndex: 12, background: '#898787ff', border: 'none', borderRadius: 40, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.5em', color: '#fff', boxShadow: '0 2px 8px #0006' }}
@@ -86,6 +98,11 @@ const NewTabApp: React.FC = () => {
             {blockSitesOpen && (
                 <BlockSitesModal open={blockSitesOpen} onClose={() => setBlockSitesOpen(false)} />
             )}
+            {/* Bookmarks modal */}
+            {bookmarksOpen && (
+                <BookmarksModal open={bookmarksOpen} onClose={() => setBookmarksOpen(false)} />
+            )}
+            <BookmarksBar />
             {/* TodoList dropdown */}
             <TodoList open={todoOpen} onClose={() => setTodoOpen(false)} />
             {/* Settings modal */}
