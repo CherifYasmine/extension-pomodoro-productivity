@@ -21,34 +21,44 @@ import {
 interface PomodoroPanelProps {
   durations: { focus: number; break: number; long: number };
 }
-// ...existing code...
 
 const initialPomodoro: PomodoroStateCanonical = { phase: 'idle', endsAt: null, running: false, cycle: 0 };
 
 export const PomodoroPanel: React.FC<PomodoroPanelProps> = ({ durations }) => {
   const [pomodoro, setPomodoro] = useState<PomodoroStateCanonical>(initialPomodoro);
   const quoteIdx = useRotatingQuoteIdx();
-  // Track previous phase for notification
   const [prevPhase, setPrevPhase] = useState<string>(initialPomodoro.phase);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
   useEffect(() => {
     if (pomodoro.phase !== prevPhase) {
-      chrome.storage.local.get(['pomodoroNotifications'], res => {
-        if (res.pomodoroNotifications !== false) {
-          showPhaseNotification(pomodoro.phase);
-        }
-      });
-      chrome.storage.local.get(['pomodoroSound'], res => {
-        if (res.pomodoroSound !== false) { 
-          playPhaseSound(pomodoro.phase); 
-        }
-      });
+      if (hasMounted) {
+        chrome.storage.local.get(['pomodoroNotifications'], res => {
+          if (res.pomodoroNotifications !== false) {
+            showPhaseNotification(pomodoro.phase);
+          }
+        });
+        chrome.storage.local.get(['pomodoroSound'], res => {
+          if (res.pomodoroSound !== false) { 
+            playPhaseSound(pomodoro.phase); 
+          }
+        });
+      }
       setPrevPhase(pomodoro.phase);
     }
   }, [pomodoro.phase, prevPhase]);
 
+  // Mark mounted after first render
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   // Subscribe to storage changes
   useEffect(() => {
-    readState((s) => setPomodoro(s));
+    readState((s) => {
+      setPomodoro(s);
+      setPrevPhase(s.phase);
+      setHasMounted(true);
+    });
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (changes.pomodoroState && changes.pomodoroState.newValue) setPomodoro(changes.pomodoroState.newValue as PomodoroStateCanonical);
     };
