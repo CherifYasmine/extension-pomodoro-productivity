@@ -91,7 +91,7 @@ body, html {
 
 /* Pomodoro circle: use a clamped CSS variable so it scales but is capped */
 .pomodoro-circle {
-  --circle-size: clamp(160px, 24vw, 480px); /* min 160px, preferred 24vw, max 480px */
+  --circle-size: clamp(130px, 20vw, 420px); /* min 160px, preferred 24vw, max 480px */
   position: relative;
   width: var(--circle-size);
   height: var(--circle-size);
