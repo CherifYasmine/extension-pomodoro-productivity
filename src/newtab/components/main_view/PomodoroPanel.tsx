@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRotatingQuoteIdx, InspirationalQuote } from '../../../shared/rotatingQuote';
-
 import { PomodoroCircle } from './PomodoroTimer';
 import {
   PomodoroStateCanonical,
@@ -14,9 +13,7 @@ import {
   computeDisplayCycle,
   persistState,
   normalizeDurations,
-  CYCLES_BEFORE_LONG_BREAK,
-  playPhaseSound,
-  showPhaseNotification
+  CYCLES_BEFORE_LONG_BREAK
 } from '../../../shared/pomodoroLogic';
 interface PomodoroPanelProps {
   durations: { focus: number; break: number; long: number };
@@ -27,37 +24,12 @@ const initialPomodoro: PomodoroStateCanonical = { phase: 'idle', endsAt: null, r
 export const PomodoroPanel: React.FC<PomodoroPanelProps> = ({ durations }) => {
   const [pomodoro, setPomodoro] = useState<PomodoroStateCanonical>(initialPomodoro);
   const quoteIdx = useRotatingQuoteIdx();
-  const [prevPhase, setPrevPhase] = useState<string>(initialPomodoro.phase);
-  const [hasMounted, setHasMounted] = useState<boolean>(false);
-  useEffect(() => {
-    if (pomodoro.phase !== prevPhase) {
-      if (hasMounted) {
-        chrome.storage.local.get(['pomodoroNotifications'], res => {
-          if (res.pomodoroNotifications !== false) {
-            showPhaseNotification(pomodoro.phase);
-          }
-        });
-        chrome.storage.local.get(['pomodoroSound'], res => {
-          if (res.pomodoroSound !== false) { 
-            playPhaseSound(pomodoro.phase); 
-          }
-        });
-      }
-      setPrevPhase(pomodoro.phase);
-    }
-  }, [pomodoro.phase, prevPhase]);
-
-  // Mark mounted after first render
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  // UI no longer triggers notifications/sounds; handled in background script.
 
   // Subscribe to storage changes
   useEffect(() => {
     readState((s) => {
       setPomodoro(s);
-      setPrevPhase(s.phase);
-      setHasMounted(true);
     });
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (changes.pomodoroState && changes.pomodoroState.newValue) setPomodoro(changes.pomodoroState.newValue as PomodoroStateCanonical);

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Productivity Focus",
   "version": "0.1.0",
-  "description": "PTransform your new tab into a personal productivity hub—Pomodoro timer, daily goal, and persistent to-do list, all in one beautiful dashboard",
+  "description": "Transform your new tab into a personal productivity hub—Pomodoro timer, daily goal, and persistent to-do list, all in one beautiful dashboard",
   "action": {
     "default_title": "Focus Mode",
     "default_popup": "popup.html"
@@ -16,7 +16,9 @@
     "bookmarks",
     "notifications",
     "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess"
+    "declarativeNetRequestWithHostAccess",
+    "offscreen",
+    "alarms"
   ],
   "host_permissions": [
     "*://*/*"
@@ -32,7 +34,7 @@
 
   ,"web_accessible_resources": [
     {
-      "resources": ["blocked.html"],
+      "resources": ["blocked.html", "sounds/notification.wav", "sounds/notification.mp3", "offscreen.html"],
       "matches": ["<all_urls>"]
     }
   ]
