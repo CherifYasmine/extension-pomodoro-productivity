@@ -71,9 +71,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
             <input
               className={styles.input}
               type="number"
-              min={0.05}
+              min={1}
               max={120}
-              step={0.01}
+              step={1}
               value={durations.focus}
               onChange={e => setDurations({ ...durations, focus: Number(e.target.value) })}
             />
@@ -83,9 +83,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
             <input
               className={styles.input}
               type="number"
-              min={0.05}
+              min={1}
               max={60}
-              step={0.01}
+              step={1}
               value={durations.break}
               onChange={e => setDurations({ ...durations, break: Number(e.target.value) })}
             />
@@ -95,9 +95,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ open, durations, s
             <input
               className={styles.input}
               type="number"
-              min={0.05}
+              min={1}
               max={60}
-              step={0.01}
+              step={1}
               value={durations.long}
               onChange={e => setDurations({ ...durations, long: Number(e.target.value) })}
             />

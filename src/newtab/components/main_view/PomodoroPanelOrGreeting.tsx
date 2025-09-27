@@ -15,6 +15,7 @@ interface Props {
 export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name, mainTask, editTask, setMainTask, setEditTask }) => {
   const [pomodoro, setPomodoro] = useState<any>(null);
   const [userName, setUserName] = useState<string>(name || '');
+  const [nameLoaded, setNameLoaded] = useState<boolean>(false);
   const [editingName, setEditingName] = useState<boolean>(false);
   // Call hooks unconditionally (must be before any early returns)
   const quoteIdx = useRotatingQuoteIdx();
@@ -22,15 +23,21 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
     chrome.storage.local.get(['pomodoroState'], (res) => {
       if (res.pomodoroState) setPomodoro(res.pomodoroState);
     });
+    // Load stored userName and mark when loading is finished so we don't
+    // auto-enter edit mode before storage has returned.
     chrome.storage.local.get(['userName'], (res) => {
       if (typeof res.userName === 'string') setUserName(res.userName);
+      setNameLoaded(true);
     });
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (changes.pomodoroState && changes.pomodoroState.newValue) {
         setPomodoro(changes.pomodoroState.newValue);
       }
-      if (changes.userName && typeof changes.userName.newValue === 'string') {
-        setUserName(changes.userName.newValue || '');
+      if (changes.userName) {
+        // If the stored name was changed/removed, update local state and
+        // consider the name as loaded.
+        setUserName(typeof changes.userName.newValue === 'string' ? changes.userName.newValue || '' : '');
+        setNameLoaded(true);
       }
     };
     chrome.storage.onChanged.addListener(listener);
@@ -39,8 +46,11 @@ export const PomodoroPanelOrGreeting: React.FC<Props> = ({ durations, time, name
 
   // If no name yet, automatically start editing mode
   useEffect(() => {
-    if (!userName) setEditingName(true);
-  }, [userName]);
+    // Only auto-enter editing mode after we've attempted to load the name
+    // from storage. This prevents showing the input briefly while storage
+    // is still loading.
+    if (nameLoaded && !userName) setEditingName(true);
+  }, [nameLoaded, userName]);
   if (pomodoro && (pomodoro.running || (!pomodoro.running && pomodoro.pausedAt != null && pomodoro.phase !== 'idle'))) {
     return <PomodoroPanel durations={durations} />; // Early return AFTER all hooks have been called
   }
